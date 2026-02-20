@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Coupon - The Brainiacs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Reuse Header -->
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="main.html" class="logo">
+                <i class="fa-solid fa-brain"></i>
+                <div class="logo-text">
+                    <span>The</span>
+                    <strong>Brainiacs</strong>
+                </div>
+            </a>
+
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search coupons, brands...">
+            </div>
+
+            <div class="nav-icons">
+                <a href="#" class="icon-btn highlight"><i class="fa-regular fa-user"></i></a>
+                <a href="#" class="icon-btn"><i class="fa-solid fa-cart-shopping"></i></a>
+                <a href="#" class="icon-btn"><i class="fa-regular fa-bell"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Upload Section -->
+    <section class="upload-section">
+        <div class="container">
+            <div class="form-container">
+                <h2>Upload Coupon</h2>
+                <form action="#">
+
+                    <div class="form-group">
+                        <label>Brand Name *</label>
+                        <select class="form-control red-outline">
+                            <option value="">Select Brand</option>
+                            <option value="amazon">Amazon</option>
+                            <option value="flipkart">Flipkart</option>
+                            <option value="zomato">Zomato</option>
+                            <option value="swiggy">Swiggy</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select class="form-control red-outline">
+                            <option value="">Select Category</option>
+                            <option value="food">Food</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="travel">Travel</option>
+                            <option value="electronics">Electronics</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Coupon Code *</label>
+                        <input type="text" class="form-control" placeholder="Enter coupon code">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea class="form-control" rows="3"
+                            placeholder="e.g., 15% off on ₹3000 cart value"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Expiry Date *</label>
+                        <input type="date" class="form-control red-outline text-center" value="2026-02-14">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Screenshot/Terms & Conditions *</label>
+                        <div class="file-upload-box red-outline">
+                            <input type="file" id="file-upload" hidden>
+                            <label for="file-upload">
+                                <i class="fa-solid fa-camera"></i> Upload Image
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-submit">
+                        <button type="submit" class="btn btn-primary full-width">Upload Coupon</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reuse Footer -->
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-left">
+                <h4>Hoopon by Corporate Raessss</h4>
+                <p>Careless Innovation, Scams</p>
+                <p class="phone">Be Scammed Now</p>
+            </div>
+            <div class="footer-right">
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+                <a href="#">Contact Us</a>
+                <a href="#" class="footer-icon"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="footer-btn">Don't!</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
