@@ -2,6 +2,7 @@
     "name": "brainiacs-marketplace",
     "version": "0.1.0",
     "private": true,
+    "homepage": "https://srikar-nalajala.github.io/thebrainiacs",
     "scripts": {
         "dev": "next dev",
         "build": "next build",
