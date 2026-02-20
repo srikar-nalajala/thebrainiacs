@@ -1,21 +1,43 @@
+'use client';
+
 import { supabase } from '../../../lib/supabase';
 import Link from 'next/link';
 import CouponActions from './CouponActions';
 import Header from '../../components/Header';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export const revalidate = 60;
+export default function CouponDetailsClient() {
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
 
-export default async function CouponDetailsPage({ params }) {
-    const { id } = params;
+    const [coupon, setCoupon] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    // Fetch single coupon data
-    const { data: coupon, error } = await supabase
-        .from('coupons')
-        .select('*')
-        .eq('id', id)
-        .single();
+    useEffect(() => {
+        const fetchCoupon = async () => {
+            const { data, error } = await supabase
+                .from('coupons')
+                .select('*')
+                .eq('id', id)
+                .single();
+            if (!error && data) {
+                setCoupon(data);
+            }
+            setLoading(false);
+        };
+        fetchCoupon();
+    }, [id]);
 
-    if (error || !coupon) {
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-gray-500">
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
+    if (!coupon) {
         return (
             <div className="min-h-screen flex items-center justify-center text-gray-500">
                 <p>Coupon not found or has expired.</p>
@@ -25,11 +47,6 @@ export default async function CouponDetailsPage({ params }) {
             </div>
         );
     }
-
-    // Calculate expiry countdown (mock logic for demo purposes, or real if date exists)
-    const daysLeft = coupon.expiry_date
-        ? Math.ceil((new Date(coupon.expiry_date) - new Date()) / (1000 * 60 * 60 * 24))
-        : 7; // Default fallback
 
     return (
         <>
@@ -48,10 +65,6 @@ export default async function CouponDetailsPage({ params }) {
                                     </span>
                                 </div>
                                 <p className="text-gray-500 text-sm">Brand Image Placeholder</p>
-                                {/* 
-                  Real Image implementation:
-                  <img src={coupon.image_url} alt={coupon.brand_name} className="h-full w-full object-cover" />
-                */}
                             </div>
                         </div>
 
