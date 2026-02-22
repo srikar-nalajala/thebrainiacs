@@ -152,7 +152,7 @@ export default function LoginPage() {
                                         onChange={(e) => setAgreedTerms(e.target.checked)}
                                     />
                                     <span className="text-gray-600 text-sm select-none">
-                                        I agree to the <a href="#" className="text-red-500 font-semibold hover:underline">Terms & Conditions</a>
+                                        I agree to the <Link href="/" className="text-red-500 font-semibold hover:underline">Terms & Conditions</Link>
                                     </span>
                                 </label>
 
@@ -164,7 +164,7 @@ export default function LoginPage() {
                                         onChange={(e) => setAgreedPrivacy(e.target.checked)}
                                     />
                                     <span className="text-gray-600 text-sm select-none">
-                                        I agree to the <a href="#" className="text-red-500 font-semibold hover:underline">Privacy Policy</a>
+                                        I agree to the <Link href="/" className="text-red-500 font-semibold hover:underline">Privacy Policy</Link>
                                     </span>
                                 </label>
                             </div>

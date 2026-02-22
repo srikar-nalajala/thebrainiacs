@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import Header from '../components/Header';
+import Link from 'next/link';
 
 export default function UploadPage() {
     const router = useRouter();
@@ -271,10 +272,10 @@ export default function UploadPage() {
                         <p className="phone">© 2026 The Brainiacs. All rights reserved.</p>
                     </div>
                     <div className="footer-right">
-                        <a href="#">Terms</a>
-                        <a href="#">Privacy</a>
-                        <a href="#">Contact Us</a>
-                        <a href="#" className="footer-icon"><i className="fa-brands fa-instagram"></i></a>
+                        <Link href="/">Terms</Link>
+                        <Link href="/">Privacy</Link>
+                        <Link href="/">Contact Us</Link>
+                        <Link href="/" className="footer-icon"><i className="fa-brands fa-instagram"></i></Link>
                         <div className="footer-btn">Don't!</div>
                     </div>
                 </div>

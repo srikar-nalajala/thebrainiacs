@@ -35,8 +35,8 @@ export default function Header() {
                     <Link href={user ? "/dashboard" : "/login"} className="icon-btn highlight" title={user ? "Dashboard" : "Login"}>
                         <i className={`fa-regular ${user ? 'fa-id-badge' : 'fa-user'}`}></i>
                     </Link>
-                    <a href="#" className="icon-btn"><i className="fa-solid fa-cart-shopping"></i></a>
-                    <a href="#" className="icon-btn"><i className="fa-regular fa-bell"></i></a>
+                    <Link href="/dashboard" className="icon-btn"><i className="fa-solid fa-cart-shopping"></i></Link>
+                    <Link href="/dashboard" className="icon-btn"><i className="fa-regular fa-bell"></i></Link>
                     {user && (
                         <button onClick={logout} className="icon-btn text-red-500" title="Logout">
                             <i className="fa-solid fa-right-from-bracket"></i>

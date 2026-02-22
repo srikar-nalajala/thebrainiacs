@@ -99,9 +99,9 @@ export default function DashboardPage() {
                         <p className="phone">© 2026 The Brainiacs. All rights reserved.</p>
                     </div>
                     <div className="footer-right">
-                        <a href="#">Terms</a>
-                        <a href="#">Privacy</a>
-                        <a href="#">Contact Us</a>
+                        <Link href="/">Terms</Link>
+                        <Link href="/">Privacy</Link>
+                        <Link href="/">Contact Us</Link>
                     </div>
                 </div>
             </footer>

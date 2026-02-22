@@ -36,14 +36,14 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="brands-grid">
-                        <a href="#" className="brand-card"><i className="fa-brands fa-amazon"></i> <span>Amazon</span></a>
-                        <a href="#" className="brand-card"><i className="fa-brands fa-flipboard"></i> <span>Flipkart</span></a>
-                        <a href="#" className="brand-card"><span className="brand-text">Myntra</span></a>
-                        <a href="#" className="brand-card"><span className="brand-text" style={{ color: '#CB202D' }}>Zomato</span></a>
-                        <a href="#" className="brand-card"><span className="brand-text" style={{ color: '#FC8019' }}>Swiggy</span></a>
-                        <a href="#" className="brand-card"><span className="brand-text" style={{ color: '#008ECC' }}>TATA</span></a>
-                        <a href="#" className="brand-card"><i className="fa-solid fa-film"></i> <span>BookMyShow</span></a>
-                        <a href="#" className="brand-card"><span>Appliances</span></a>
+                        <Link href="/marketplace" className="brand-card"><i className="fa-brands fa-amazon"></i> <span>Amazon</span></Link>
+                        <Link href="/marketplace" className="brand-card"><i className="fa-brands fa-flipboard"></i> <span>Flipkart</span></Link>
+                        <Link href="/marketplace" className="brand-card"><span className="brand-text">Myntra</span></Link>
+                        <Link href="/marketplace" className="brand-card"><span className="brand-text" style={{ color: '#CB202D' }}>Zomato</span></Link>
+                        <Link href="/marketplace" className="brand-card"><span className="brand-text" style={{ color: '#FC8019' }}>Swiggy</span></Link>
+                        <Link href="/marketplace" className="brand-card"><span className="brand-text" style={{ color: '#008ECC' }}>TATA</span></Link>
+                        <Link href="/marketplace" className="brand-card"><i className="fa-solid fa-film"></i> <span>BookMyShow</span></Link>
+                        <Link href="/marketplace" className="brand-card"><span>Appliances</span></Link>
                     </div>
                 </div>
             </section>
@@ -51,33 +51,33 @@ export default function Home() {
                 <div className="container">
                     <div className="section-header">
                         <h3>Browse by Category</h3>
-                        <a href="#" className="see-all">See All <i className="fa-solid fa-arrow-right"></i></a>
+                        <Link href="/marketplace" className="see-all">See All <i className="fa-solid fa-arrow-right"></i></Link>
                     </div>
                     <div className="categories-grid">
-                        <a href="#" className="category-card">
+                        <Link href="/marketplace" className="category-card">
                             <div className="icon-box"><i className="fa-solid fa-utensils"></i></div>
                             <span>Food</span>
-                        </a>
-                        <a href="#" className="category-card">
+                        </Link>
+                        <Link href="/marketplace" className="category-card">
                             <div className="icon-box"><i className="fa-solid fa-shirt"></i></div>
                             <span>Fashion</span>
-                        </a>
-                        <a href="#" className="category-card">
+                        </Link>
+                        <Link href="/marketplace" className="category-card">
                             <div className="icon-box"><i className="fa-solid fa-plane"></i></div>
                             <span>Travel</span>
-                        </a>
-                        <a href="#" className="category-card">
+                        </Link>
+                        <Link href="/marketplace" className="category-card">
                             <div className="icon-box"><i className="fa-solid fa-gamepad"></i></div>
                             <span>Games</span>
-                        </a>
-                        <a href="#" className="category-card">
+                        </Link>
+                        <Link href="/marketplace" className="category-card">
                             <div className="icon-box"><i className="fa-solid fa-house"></i></div>
                             <span>Groceries</span>
-                        </a>
-                        <a href="#" className="category-card">
+                        </Link>
+                        <Link href="/marketplace" className="category-card">
                             <div className="icon-box"><i className="fa-solid fa-car"></i></div>
                             <span>Automotive</span>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -89,10 +89,10 @@ export default function Home() {
                         <p className="phone">© 2026 The Brainiacs. All rights reserved.</p>
                     </div>
                     <div className="footer-right">
-                        <a href="#">Terms</a>
-                        <a href="#">Privacy</a>
-                        <a href="#">Contact Us</a>
-                        <a href="#" className="footer-icon"><i className="fa-brands fa-instagram"></i></a>
+                        <Link href="/">Terms</Link>
+                        <Link href="/">Privacy</Link>
+                        <Link href="/">Contact Us</Link>
+                        <Link href="/" className="footer-icon"><i className="fa-brands fa-instagram"></i></Link>
                         <div className="footer-btn">Don't!</div>
                     </div>
                 </div>
