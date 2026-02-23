@@ -45,10 +45,12 @@ export async function POST(req) {
 
         // Prompt configuration
         const prompt = `
-        Cannot you analyze this image?
+        Analyze this image:
         1. Extract all text from this coupon screenshot.
         2. I am looking for the specific code: "${expectedCode}".
-        3. Respond ONLY with a JSON object in this format:
+        3. IMPORTANT: Many apps (like Ajio, Swiggy, etc.) hide the full code and show a truncated version ending in "..." (e.g., "INSEG3QNGKQD..."). 
+        If you find a partial code in the image that exactly matches the BEGINNING of "${expectedCode}", you MUST consider it found and set "found": true.
+        4. Respond ONLY with a valid JSON object in this format (no markdown tags):
         {
             "found": boolean,
             "extractedText": "string",
