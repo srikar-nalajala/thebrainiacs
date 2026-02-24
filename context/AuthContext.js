@@ -35,7 +35,10 @@ export function AuthProvider({ children }) {
             }
         } catch (error) {
             console.error('Error fetching user:', error);
-            localStorage.removeItem('user_id');
+            // Supabase returns PGRST116 if the record is explicitly not found
+            if (error.code === 'PGRST116') {
+                localStorage.removeItem('user_id');
+            }
         } finally {
             setLoading(false);
         }
