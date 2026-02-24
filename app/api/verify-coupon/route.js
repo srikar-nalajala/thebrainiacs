@@ -50,7 +50,8 @@ export async function POST(req) {
         2. I am looking for the specific code: "${expectedCode}".
         3. IMPORTANT: Many apps (like Ajio, Swiggy, etc.) hide the full code and show a truncated version ending in "..." (e.g., "INSEG3QNGKQD..."). 
         If you find a partial code in the image that exactly matches the BEGINNING of "${expectedCode}", you MUST consider it found and set "found": true.
-        4. Respond ONLY with a valid JSON object in this format (no markdown tags):
+        4. CRITICAL: If the expected code is exactly "NOCODE", look for the literal visible text "NOCODE" in the image. If "NOCODE" is printed on the screen, then set "found": true.
+        5. Respond ONLY with a valid JSON object in this format (no markdown tags):
         {
             "found": boolean,
             "extractedText": "string",
