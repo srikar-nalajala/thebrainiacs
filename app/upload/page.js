@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import Header from '../components/Header';
 import Link from 'next/link';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Tesseract from 'tesseract.js';
 
 export default function UploadPage() {
     const router = useRouter();
@@ -44,71 +44,55 @@ export default function UploadPage() {
         setVerificationResult(null);
 
         const expectedCode = formData.code;
-        const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-        if (!apiKey) {
-            setVerificationResult({
-                success: false,
-                message: 'Server Configuration Error: API Key missing in environment settings.'
-            });
-            setVerifying(false);
-            return;
-        }
 
         try {
-            // Convert file to base64 for Gemini
-            const fileToBase64 = (file) => new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = error => reject(error);
-            });
+            // Run Open-Source Tesseract OCR directly in the browser
+            const { data: { text } } = await Tesseract.recognize(
+                file,
+                'eng',
+                { logger: m => console.log(m) } // Optional: log progress
+            );
 
-            const base64Image = await fileToBase64(file);
-            const genAI = new GoogleGenerativeAI(apiKey);
+            // Clean up extracted OCR text for comparison
+            const cleanedExtractedText = text.replace(/\s+/g, '').toUpperCase();
+            const expectedCleaned = expectedCode.replace(/\s+/g, '').toUpperCase();
 
-            const prompt = `
-            Analyze this image:
-            1. Extract all text from this coupon screenshot.
-            2. I am looking for the specific code: "${expectedCode}".
-            3. IMPORTANT: Many apps (like Ajio, Swiggy, etc.) hide the full code and show a truncated version ending in "..." (e.g., "INSEG3QNGKQD..."). 
-            If you find a partial code in the image that exactly matches the BEGINNING of "${expectedCode}", you MUST consider it found and set "found": true.
-            4. CRITICAL: If the expected code is exactly "NOCODE", look for the literal visible text "NOCODE" in the image. If "NOCODE" is printed on the screen, then set "found": true.
-            5. Respond ONLY with a valid JSON object in this format (no markdown tags):
-            {
-                "found": boolean,
-                "extractedText": "string",
-                "confidence": "high" | "medium" | "low"
+            let found = false;
+
+            // 1. Literal "NOCODE" exception
+            if (expectedCleaned === 'NOCODE' && cleanedExtractedText.includes('NOCODE')) {
+                found = true;
             }
-            `;
+            // 2. Exact match
+            else if (cleanedExtractedText.includes(expectedCleaned)) {
+                found = true;
+            }
+            // 3. Truncated Prefix Check (Common in Swiggy/Ajio "CODE...")
+            else if (expectedCleaned.length > 4) {
+                // If OCR grabbed something like "AJIO..." or "AJIOXXX", we evaluate if 
+                // any contiguous 4+ char block of the expected code resides in the raw scan
+                // Because OCR isn't perfect, we check for a highly probable substring
+                const prefixLength = Math.max(4, Math.floor(expectedCleaned.length * 0.6));
+                const substringPrefix = expectedCleaned.substring(0, prefixLength);
 
-            const imagePart = {
-                inlineData: {
-                    data: base64Image,
-                    mimeType: file.type || 'image/jpeg',
-                },
-            };
+                if (cleanedExtractedText.includes(substringPrefix)) {
+                    found = true;
+                }
+            }
 
-            const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-            const result = await model.generateContent([prompt, imagePart]);
-            const text = result.response.text();
-
-            const cleanedText = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            const analysis = JSON.parse(cleanedText);
-
-            if (analysis.found) {
+            if (found) {
                 setVerificationResult({
                     success: true,
-                    message: 'Coupon Verified Successfully!'
+                    message: 'Coupon Verified Successfully Using Open-Source OCR!'
                 });
             } else {
                 setVerificationResult({
                     success: false,
-                    message: 'Coupon code not found in image.'
+                    message: 'Coupon code not detected in image.'
                 });
             }
         } catch (error) {
-            console.error('Verification failed', error);
+            console.error('OCR Verification failed', error);
             setVerificationResult({
                 success: false,
                 message: 'Verification failed: ' + error.message
