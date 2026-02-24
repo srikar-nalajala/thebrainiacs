@@ -83,7 +83,7 @@ export default function UploadPage() {
             if (found) {
                 setVerificationResult({
                     success: true,
-                    message: 'Coupon Verified Successfully Using Open-Source OCR!'
+                    message: 'Coupon Verified Successfully!'
                 });
             } else {
                 setVerificationResult({
