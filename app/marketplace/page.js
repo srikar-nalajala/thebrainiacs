@@ -13,11 +13,26 @@ export default function MarketplacePage() {
     useEffect(() => {
         async function fetchCoupons() {
             try {
-                const { data, error } = await supabase
+                // Capture search parameters locally to ensure static-build stability
+                const params = new URLSearchParams(window.location.search);
+                const activeCategory = params.get('category');
+                const activeBrand = params.get('brand');
+
+                let query = supabase
                     .from('coupons')
                     .select('*')
                     .neq('status', 'sold') // Filter out sold coupons
                     .order('created_at', { ascending: false });
+
+                if (activeCategory) {
+                    query = query.eq('category', activeCategory);
+                }
+
+                if (activeBrand) {
+                    query = query.eq('brand_name', activeBrand);
+                }
+
+                const { data, error } = await query;
 
                 if (error) {
                     throw error;
@@ -56,6 +71,16 @@ export default function MarketplacePage() {
                         <p className="mt-5 max-w-xl mx-auto text-xl text-gray-500">
                             Find the best deals on your favorite brands.
                         </p>
+                        {/* Dynamic Filter Badges */}
+                        {typeof window !== 'undefined' && (new URLSearchParams(window.location.search).get('category') || new URLSearchParams(window.location.search).get('brand')) && (
+                            <div className="mt-4 flex justify-center items-center gap-2">
+                                <span className="bg-red-100 text-[#E50914] px-4 py-2 rounded-full font-medium inline-flex items-center gap-2">
+                                    <i className="fa-solid fa-filter"></i>
+                                    Filtering: {new URLSearchParams(window.location.search).get('category') || new URLSearchParams(window.location.search).get('brand')}
+                                    <Link href="/marketplace" className="ml-2 bg-[#E50914] text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-700 transition" title="Clear Filters"><i className="fa-solid fa-xmark text-xs"></i></Link>
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     {/* 12-Column Grid Layout (Responsive) */}

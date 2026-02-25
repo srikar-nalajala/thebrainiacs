@@ -1,7 +1,58 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from './components/Header';
+import { supabase } from '../lib/supabase';
+
+const brandIcons = {
+    'Amazon': <><i className="fa-brands fa-amazon"></i> <span>Amazon</span></>,
+    'Flipkart': <><i className="fa-brands fa-flipboard"></i> <span>Flipkart</span></>,
+    'Myntra': <span className="brand-text">Myntra</span>,
+    'Zomato': <span className="brand-text" style={{ color: '#CB202D' }}>Zomato</span>,
+    'Swiggy': <span className="brand-text" style={{ color: '#FC8019' }}>Swiggy</span>,
+    'Swiggy Instamart': <span className="brand-text" style={{ color: '#FC8019' }}>Swiggy Instamart</span>,
+    'TATA': <span className="brand-text" style={{ color: '#008ECC' }}>TATA</span>,
+    'BookMyShow': <><i className="fa-solid fa-film"></i> <span>BookMyShow</span></>,
+    'Giva': <span className="brand-text" style={{ color: '#FF7043' }}>Giva</span>,
+    'Lenskart': <span className="brand-text" style={{ color: '#11A5B8' }}>Lenskart</span>,
+    'Uber': <><i className="fa-brands fa-uber"></i> <span>Uber</span></>,
+};
+
+const categoryIcons = {
+    'Food': <i className="fa-solid fa-utensils"></i>,
+    'Fashion': <i className="fa-solid fa-shirt"></i>,
+    'Travel': <i className="fa-solid fa-plane"></i>,
+    'Games': <i className="fa-solid fa-gamepad"></i>,
+    'Groceries': <i className="fa-solid fa-basket-shopping"></i>,
+    'Grocery': <i className="fa-solid fa-basket-shopping"></i>,
+    'Electronics': <i className="fa-solid fa-laptop"></i>,
+    'Automotive': <i className="fa-solid fa-car"></i>,
+};
 
 export default function Home() {
+    const [brands, setBrands] = useState([]);
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        async function fetchActiveFilters() {
+            const { data, error } = await supabase
+                .from('coupons')
+                .select('brand_name, category')
+                .neq('status', 'sold');
+
+            if (!error && data) {
+                // Deduplicate sets essentially simulating a SELECT DISTINCT
+                const uniqueBrands = [...new Set(data.map(item => item.brand_name).filter(Boolean))];
+                const uniqueCategories = [...new Set(data.map(item => item.category).filter(Boolean))];
+
+                setBrands(uniqueBrands);
+                setCategories(uniqueCategories);
+            }
+        }
+
+        fetchActiveFilters();
+    }, []);
     return (
         <>
             <Header />
@@ -36,14 +87,15 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="brands-grid">
-                        <Link href="/marketplace" className="brand-card"><i className="fa-brands fa-amazon"></i> <span>Amazon</span></Link>
-                        <Link href="/marketplace" className="brand-card"><i className="fa-brands fa-flipboard"></i> <span>Flipkart</span></Link>
-                        <Link href="/marketplace" className="brand-card"><span className="brand-text">Myntra</span></Link>
-                        <Link href="/marketplace" className="brand-card"><span className="brand-text" style={{ color: '#CB202D' }}>Zomato</span></Link>
-                        <Link href="/marketplace" className="brand-card"><span className="brand-text" style={{ color: '#FC8019' }}>Swiggy</span></Link>
-                        <Link href="/marketplace" className="brand-card"><span className="brand-text" style={{ color: '#008ECC' }}>TATA</span></Link>
-                        <Link href="/marketplace" className="brand-card"><i className="fa-solid fa-film"></i> <span>BookMyShow</span></Link>
-                        <Link href="/marketplace" className="brand-card"><span>Appliances</span></Link>
+                        {brands.length > 0 ? brands.map((brand, idx) => (
+                            <Link key={idx} href={`/marketplace?brand=${encodeURIComponent(brand)}`} className="brand-card">
+                                {brandIcons[brand] || <span>{brand}</span>}
+                            </Link>
+                        )) : (
+                            <div className="col-span-full py-4 text-center text-gray-500">
+                                <i className="fa-solid fa-spinner fa-spin mr-2"></i> Loading Active Brands...
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
@@ -54,30 +106,18 @@ export default function Home() {
                         <Link href="/marketplace" className="see-all">See All <i className="fa-solid fa-arrow-right"></i></Link>
                     </div>
                     <div className="categories-grid">
-                        <Link href="/marketplace" className="category-card">
-                            <div className="icon-box"><i className="fa-solid fa-utensils"></i></div>
-                            <span>Food</span>
-                        </Link>
-                        <Link href="/marketplace" className="category-card">
-                            <div className="icon-box"><i className="fa-solid fa-shirt"></i></div>
-                            <span>Fashion</span>
-                        </Link>
-                        <Link href="/marketplace" className="category-card">
-                            <div className="icon-box"><i className="fa-solid fa-plane"></i></div>
-                            <span>Travel</span>
-                        </Link>
-                        <Link href="/marketplace" className="category-card">
-                            <div className="icon-box"><i className="fa-solid fa-gamepad"></i></div>
-                            <span>Games</span>
-                        </Link>
-                        <Link href="/marketplace" className="category-card">
-                            <div className="icon-box"><i className="fa-solid fa-house"></i></div>
-                            <span>Groceries</span>
-                        </Link>
-                        <Link href="/marketplace" className="category-card">
-                            <div className="icon-box"><i className="fa-solid fa-car"></i></div>
-                            <span>Automotive</span>
-                        </Link>
+                        {categories.length > 0 ? categories.map((cat, idx) => (
+                            <Link key={idx} href={`/marketplace?category=${encodeURIComponent(cat)}`} className="category-card">
+                                <div className="icon-box">
+                                    {categoryIcons[cat] || <i className="fa-solid fa-tag"></i>}
+                                </div>
+                                <span>{cat}</span>
+                            </Link>
+                        )) : (
+                            <div className="col-span-full py-4 text-center text-gray-500">
+                                <i className="fa-solid fa-spinner fa-spin mr-2"></i> Loading Active Categories...
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
