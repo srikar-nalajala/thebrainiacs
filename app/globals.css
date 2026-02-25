@@ -647,4 +647,8 @@ select.red-outline {
         justify-content: center;
     }
 }
-/* Force Rebuild */
+/* Force Rebuild */   
+ . c u s t o m - s c r o l l b a r : : - w e b k i t - s c r o l l b a r   {   w i d t h :   6 p x ;   }  
+ . c u s t o m - s c r o l l b a r : : - w e b k i t - s c r o l l b a r - t r a c k   {   b a c k g r o u n d :   t r a n s p a r e n t ;   }  
+ . c u s t o m - s c r o l l b a r : : - w e b k i t - s c r o l l b a r - t h u m b   {   b a c k g r o u n d - c o l o r :   # d 1 d 5 d b ;   b o r d e r - r a d i u s :   1 0 p x ;   }  
+ 

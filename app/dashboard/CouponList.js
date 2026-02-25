@@ -71,7 +71,7 @@ export default function CouponList({ type }) {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
             {coupons.map((coupon) => (
                 <div key={coupon.id} className="border border-gray-100 rounded-xl p-6 bg-white hover:shadow-md transition-shadow">
                     <div className="flex justify-between items-start mb-4">
