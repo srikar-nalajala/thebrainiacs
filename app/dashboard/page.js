@@ -30,14 +30,14 @@ export default function DashboardPage() {
                 .from('coupons')
                 .select('*', { count: 'exact', head: true })
                 .eq('seller_id', user.id)
-                .eq('status', 'sold');
+                .in('status', ['sold', 'escrow', 'disputed']);
 
             // Count purchased
             const { count: purchasedCount } = await supabase
                 .from('coupons')
                 .select('*', { count: 'exact', head: true })
                 .eq('buyer_id', user.id)
-                .eq('status', 'sold');
+                .in('status', ['sold', 'escrow', 'disputed']);
 
             setStats({
                 uploaded: uploadedCount || 0,

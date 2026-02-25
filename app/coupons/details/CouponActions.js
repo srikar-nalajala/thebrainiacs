@@ -8,8 +8,10 @@ import { useRouter } from 'next/navigation';
 export default function CouponActions({ coupon }) {
     const { user } = useAuth();
     const router = useRouter();
-    const [isPurchased, setIsPurchased] = useState(coupon.status === 'sold' && coupon.buyer_id === user?.id);
+    const [couponStatus, setCouponStatus] = useState(coupon.status);
+    const [isPurchased, setIsPurchased] = useState(['sold', 'escrow', 'disputed'].includes(coupon.status) && coupon.buyer_id === user?.id);
     const [buying, setBuying] = useState(false);
+    const [resolving, setResolving] = useState(false);
     const [validationStatus, setValidationStatus] = useState(null); // 'valid', 'invalid', null
     const [isVerifying, setIsVerifying] = useState(false);
     const [verificationResult, setVerificationResult] = useState(null);
@@ -20,7 +22,8 @@ export default function CouponActions({ coupon }) {
 
     // Effect to check if already purchased (in case of revisit)
     useEffect(() => {
-        if (coupon.status === 'sold' && user && coupon.buyer_id === user.id) {
+        setCouponStatus(coupon.status);
+        if (['sold', 'escrow', 'disputed'].includes(coupon.status) && user && coupon.buyer_id === user.id) {
             setIsPurchased(true);
         }
     }, [coupon, user]);
@@ -38,7 +41,7 @@ export default function CouponActions({ coupon }) {
             const { error } = await supabase
                 .from('coupons')
                 .update({
-                    status: 'sold',
+                    status: 'escrow',
                     buyer_id: user.id
                 })
                 .eq('id', coupon.id);
@@ -46,7 +49,8 @@ export default function CouponActions({ coupon }) {
             if (error) throw error;
 
             setIsPurchased(true);
-            alert("Purchase successful! You can now see the code.");
+            setCouponStatus('escrow');
+            alert("Funds held securely in Escrow! You can now test the code.");
 
             // Validate the code immediately after "unlocking"
             if (couponRegex.test(coupon.code)) {
@@ -59,6 +63,30 @@ export default function CouponActions({ coupon }) {
             alert("Failed to purchase coupon. It might already be sold.");
         } finally {
             setBuying(false);
+        }
+    };
+
+    const handleResolution = async (finalStatus) => {
+        setResolving(true);
+        try {
+            const { error } = await supabase
+                .from('coupons')
+                .update({ status: finalStatus })
+                .eq('id', coupon.id);
+
+            if (error) throw error;
+
+            setCouponStatus(finalStatus);
+            if (finalStatus === 'sold') {
+                alert("Purchase Finalized! Funds released to seller.");
+            } else {
+                alert("Transaction Disputed. An admin will review your claim.");
+            }
+        } catch (err) {
+            console.error("Resolution failed:", err);
+            alert("Failed to update status.");
+        } finally {
+            setResolving(false);
         }
     };
 
@@ -147,6 +175,43 @@ export default function CouponActions({ coupon }) {
                         <div className="text-3xl font-mono font-bold text-[#222] tracking-wider select-all bg-white p-2 rounded border border-dashed border-gray-300">
                             {coupon.code}
                         </div>
+
+                        {/* Escrow Actions */}
+                        {couponStatus === 'escrow' && (
+                            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-left">
+                                <h4 className="text-sm font-bold text-blue-800 mb-2"><i className="fa-solid fa-shield-halved"></i> Payment held in Escrow</h4>
+                                <p className="text-xs text-blue-600 mb-4">Please verify the code works on the brand's website before releasing funds to the seller.</p>
+                                <div className="flex gap-2 justify-center">
+                                    <button
+                                        onClick={() => handleResolution('sold')}
+                                        disabled={resolving}
+                                        className="flex-1 bg-green-600 text-white px-4 py-2 rounded font-bold text-sm hover:bg-green-700 transition"
+                                    >
+                                        <i className="fa-solid fa-check mr-1"></i> Code Worked
+                                    </button>
+                                    <button
+                                        onClick={() => handleResolution('disputed')}
+                                        disabled={resolving}
+                                        className="flex-1 bg-red-500 text-white px-4 py-2 rounded font-bold text-sm hover:bg-red-600 transition"
+                                    >
+                                        <i className="fa-solid fa-xmark mr-1"></i> Invalid Code
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {couponStatus === 'disputed' && (
+                            <div className="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-lg text-left">
+                                <h4 className="text-sm font-bold text-orange-800"><i className="fa-solid fa-gavel"></i> Transaction Disputed</h4>
+                                <p className="text-xs text-orange-600 mt-1">This transaction is frozen and under administrative review.</p>
+                            </div>
+                        )}
+
+                        {couponStatus === 'sold' && (
+                            <div className="mt-6 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                <h4 className="text-sm font-bold text-green-800"><i className="fa-solid fa-check-double"></i> Purchase Complete</h4>
+                            </div>
+                        )}
 
                         {/* Validation Feedback */}
                         <div className="mt-3">

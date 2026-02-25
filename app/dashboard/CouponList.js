@@ -8,6 +8,15 @@ export default function CouponList({ type }) {
     const [coupons, setCoupons] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'sold': return 'bg-green-500';
+            case 'escrow': return 'bg-blue-500';
+            case 'disputed': return 'bg-orange-500';
+            default: return 'bg-yellow-500';
+        }
+    };
+
     useEffect(() => {
         if (user) {
             fetchCoupons();
@@ -69,7 +78,7 @@ export default function CouponList({ type }) {
                         <div className="flex-1">
                             <div className="flex justify-between items-start">
                                 <span className="text-gray-900 font-bold">{coupon.brand_name}</span>
-                                <span className={`px-3 py-1 rounded-full text-xs font-medium text-white ${coupon.status === 'sold' ? 'bg-green-500' : 'bg-yellow-500'}`}>
+                                <span className={`px-3 py-1 rounded-full text-xs font-medium text-white uppercase tracking-wider ${getStatusColor(coupon.status)}`}>
                                     {coupon.status || 'Active'}
                                 </span>
                             </div>
@@ -93,10 +102,15 @@ export default function CouponList({ type }) {
                         {type === 'purchases' && (
                             <div className="mt-3 pt-3 border-t border-gray-100">
                                 <p className="text-xs text-gray-500 mb-1">Coupon Code:</p>
-                                <div className="bg-gray-50 p-2 rounded border border-dashed border-gray-300 text-center">
+                                <div className="bg-gray-50 p-2 rounded border border-dashed border-gray-300 text-center flex flex-col sm:flex-row justify-between items-center sm:px-4 gap-3">
                                     <span className="font-mono font-bold text-lg text-[#E50914] select-all">
                                         {coupon.code}
                                     </span>
+                                    {['escrow', 'disputed'].includes(coupon.status) && (
+                                        <a href={`/coupons/details?id=${coupon.id}`} className="text-xs font-bold bg-[#E50914] text-white px-3 py-1.5 rounded hover:bg-red-700 transition shadow-sm">
+                                            Resolve Escrow
+                                        </a>
+                                    )}
                                 </div>
                             </div>
                         )}

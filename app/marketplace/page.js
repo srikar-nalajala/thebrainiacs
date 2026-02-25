@@ -21,7 +21,7 @@ export default function MarketplacePage() {
                 let query = supabase
                     .from('coupons')
                     .select('*')
-                    .neq('status', 'sold') // Filter out sold coupons
+                    .eq('status', 'available') // Only show explicitly available coupons
                     .order('created_at', { ascending: false });
 
                 if (activeCategory) {
