@@ -144,29 +144,33 @@ export default function LoginPage() {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="flex items-center space-x-3 cursor-pointer group">
+                                <div className="flex items-center space-x-3 group">
                                     <input
                                         type="checkbox"
+                                        id="terms-checkbox"
                                         className="w-5 h-5 accent-[#E50914] cursor-pointer"
                                         checked={agreedTerms}
                                         onChange={(e) => setAgreedTerms(e.target.checked)}
                                     />
                                     <span className="text-gray-600 text-sm select-none">
-                                        I agree to the <Link href="/" className="text-red-500 font-semibold hover:underline">Terms & Conditions</Link>
+                                        <label htmlFor="terms-checkbox" className="cursor-pointer">I agree to the </label>
+                                        <Link href="/terms" className="text-red-500 font-semibold hover:underline">Terms & Conditions</Link>
                                     </span>
-                                </label>
+                                </div>
 
-                                <label className="flex items-center space-x-3 cursor-pointer group">
+                                <div className="flex items-center space-x-3 group">
                                     <input
                                         type="checkbox"
+                                        id="privacy-checkbox"
                                         className="w-5 h-5 accent-[#E50914] cursor-pointer"
                                         checked={agreedPrivacy}
                                         onChange={(e) => setAgreedPrivacy(e.target.checked)}
                                     />
                                     <span className="text-gray-600 text-sm select-none">
-                                        I agree to the <Link href="/" className="text-red-500 font-semibold hover:underline">Privacy Policy</Link>
+                                        <label htmlFor="privacy-checkbox" className="cursor-pointer">I agree to the </label>
+                                        <Link href="/privacy" className="text-red-500 font-semibold hover:underline">Privacy Policy</Link>
                                     </span>
-                                </label>
+                                </div>
                             </div>
 
                             <button

@@ -133,7 +133,7 @@ export default function Home() {
                         <Link href="/">Privacy</Link>
                         <Link href="/">Contact Us</Link>
                         <Link href="/" className="footer-icon"><i className="fa-brands fa-instagram"></i></Link>
-                        <div className="footer-btn">Don't!</div>
+                        <Link href="/download" className="footer-btn">Get App</Link>
                     </div>
                 </div>
             </footer>

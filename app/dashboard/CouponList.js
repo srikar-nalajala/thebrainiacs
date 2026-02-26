@@ -25,7 +25,7 @@ export default function CouponList({ type }) {
 
     const fetchCoupons = async () => {
         setLoading(true);
-        let query = supabase.from('coupons').select('*');
+        let query = supabase.from('coupons').select('id, brand_name, category, status, description, expiry_date, code');
 
         if (type === 'uploads') {
             query = query.eq('seller_id', user.id);
